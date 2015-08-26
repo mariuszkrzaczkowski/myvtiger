@@ -1,5 +1,13 @@
 angular.module('myvtiger.controllers', [])
 
+.controller('NavCtrl', ['$rootScope', '$scope',
+    function($rootScope, $scope) {
+        $scope.goBack = function() {
+            window.history.back();
+        };
+    }
+])
+
 .controller('LoginCtrl', ['$rootScope', '$location', '$scope', 'API', 'SessionFactory',
     function($rootScope, $location, $scope, api, sf) {
         $scope.login = {
@@ -37,18 +45,23 @@ angular.module('myvtiger.controllers', [])
     function($rootScope, $stateParams, $scope, sf, api, $ionicModal) {
         $scope.records = [];
         $rootScope.$on('load-list', function(event) {
-            $rootScope.showLoading('Fetching Records..');
             var user = sf.getSession('user');
             var name = $stateParams.moduleName;
-            api.getList(name, user.session)
-            .success(function(data) {
-                $scope.list = data.result.records;
-                $rootScope.hideLoading();
-            })
-            .error(function(data) {
-                $rootScope.hideLoading();
-                $rootScope.toast('Oops.. Something went wrong');
-            });
+            if(sf.checkSession(name)) {
+                $scope.list = sf.getSession(name);
+            } else {
+                $rootScope.showLoading('Fetching Records..');
+                api.getList(name, user.session)
+                .success(function(data) {
+                    $scope.list = data.result.records;
+                    sf.createSession(name, data.result.records);
+                    $rootScope.hideLoading();
+                })
+                .error(function(data) {
+                    $rootScope.hideLoading();
+                    $rootScope.toast('Oops.. Something went wrong');
+                });
+            }
         });
         $rootScope.$broadcast('load-list');
         $rootScope.createNew = function() {

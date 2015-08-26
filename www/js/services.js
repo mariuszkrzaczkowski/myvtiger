@@ -2,7 +2,7 @@ angular.module('myvtiger.services', [])
 
 .factory('API', ['$http',
     function($http) {
-        var _base = "http://localhost/vtiger/vt61/modules/Mobile/api.php";
+        var _base = "http://192.168.1.67/vtiger/vt61/modules/Mobile/api.php";
         var _api = {
             login: function(user) {
                 return $http({
@@ -49,7 +49,7 @@ angular.module('myvtiger.services', [])
                 delete $window.localStorage[key];
                 return true;
             },
-            checkSession: function() {
+            checkSession: function(key) {
                 if ($window.localStorage[key]) {
                     return true;
                 } else {
