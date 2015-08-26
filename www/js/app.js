@@ -3,15 +3,15 @@ var app = angular.module('myvtiger', ['ionic', 'myvtiger.controllers', 'myvtiger
 .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider.state('login', {
         url: '/login',
-        templateUrl: 'login.html',
+        templateUrl: 'templates/login.html',
         controller: 'LoginCtrl'
     }).state('page11', {
         url: '/signup',
         templateUrl: 'page11.html',
         controller: 'SignupCtrl'
-    }).state('page12', {
+    }).state('home', {
         url: '/home',
-        templateUrl: 'page12.html',
+        templateUrl: 'templates/home.html',
         controller: 'HomeCtrl'
     });
     $urlRouterProvider.otherwise('/login');

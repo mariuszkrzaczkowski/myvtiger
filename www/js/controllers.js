@@ -20,26 +20,6 @@ angular.module('myvtiger.controllers', [])
     }
 ])
 
-.controller('SignupCtrl', ['$rootScope', '$location', '$scope', 'API', 'SessionFactory',
-    function($rootScope, $location, $scope, api, sf) {
-        $scope.reg = {
-            username: '',
-            password: ''
-        }
-        $scope.registerUser = function() {
-            $rootScope.showLoading("Authenticating..");
-            api.signup($scope.reg).success(function(data) {
-                sf.createSession(data.data);
-                $location.path('/home');
-                $rootScope.hideLoading();
-            }).error(function(data) {
-                $rootScope.hideLoading();
-                $rootScope.toast('Invalid Credentials');
-            })
-        }
-    }
-])
-
 .controller('HomeCtrl', ['$rootScope', '$scope', 'SessionFactory', 'API', '$ionicModal',
     function($rootScope, $scope, sf, api, $ionicModal) {
         $scope.todos = [];

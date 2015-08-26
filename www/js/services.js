@@ -13,9 +13,6 @@ angular.module('myvtiger.services', [])
                 });
                 // return $http.post(_base + '/modules/Mobile/api.php', dataObj);
             },
-            signup: function(user) {
-                return $http.post(_base + '/api/auth/signup', user);
-            },
             getTodos: function(session) {
                 return $http({
                     method: "POST",
