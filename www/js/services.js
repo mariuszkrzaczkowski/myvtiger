@@ -11,16 +11,22 @@ angular.module('myvtiger.services', [])
                     data: '_operation=loginAndFetchModules&username=' + user.username + '&password=' + user.password,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 });
-                // return $http.post(_base + '/modules/Mobile/api.php', dataObj);
             },
-            getRecords: function(name, session) {
+            getList: function(name, session) {
                 return $http({
                     method: "POST",
                     url: _base,
                     data: '_operation=listModuleRecords&module=' + name + '&_session=' + session,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 });
-                // return $http.get(_base + '/api/data/getTodos/' + userid);
+            },
+            getDetail: function(id, session) {
+                return $http({
+                    method: "POST",
+                    url: _base,
+                    data: '_operation=fetchRecord&record=' + id + '&_session=' + session,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                });
             },
             saveTodo: function(todo) {
                 return $http.post(_base + '/api/data/saveTodo', todo);

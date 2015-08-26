@@ -5,18 +5,18 @@ var app = angular.module('myvtiger', ['ionic', 'myvtiger.controllers', 'myvtiger
         url: '/login',
         templateUrl: 'templates/login.html',
         controller: 'LoginCtrl'
-    }).state('page11', {
-        url: '/signup',
-        templateUrl: 'page11.html',
-        controller: 'SignupCtrl'
     }).state('home', {
         url: '/home',
         templateUrl: 'templates/home.html',
         controller: 'HomeCtrl'
-    }).state('records', {
-        url: '/records',
-        templateUrl: 'templates/records.html',
-        controller: 'ModuleCtrl'
+    }).state('list', {
+        url: '/list/:moduleName',
+        templateUrl: 'templates/list.html',
+        controller: 'ListCtrl'
+    }).state('detail', {
+        url: '/detail/:recordId',
+        templateUrl: 'templates/detail.html',
+        controller: 'DetailCtrl'
     });
     $urlRouterProvider.otherwise('/login');
 })

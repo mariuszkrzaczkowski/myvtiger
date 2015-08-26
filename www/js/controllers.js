@@ -5,48 +5,52 @@ angular.module('myvtiger.controllers', [])
         $scope.login = {
             username: '',
             password: ''
-        }
+        };
         $scope.loginUser = function() {
             $rootScope.showLoading("Authenticating..");
-            api.login($scope.login).success(function(data) {
+            api.login($scope.login)
+            .success(function(data) {
                 sf.createSession('user', data.result.login);
                 sf.createSession('modules', data.result.modules);
                 $location.path('/home');
                 $rootScope.hideLoading();
-            }).error(function(data) {
+            })
+            .error(function(data) {
                 $rootScope.hideLoading();
                 $rootScope.toast('Invalid Credentials');
-            })
-        }
+            });
+        };
     }
 ])
 
 .controller('HomeCtrl', ['$rootScope', '$scope', 'SessionFactory',
     function($rootScope, $scope, sf) {
-        $scope.records = [];
+        $scope.modules = [];
         $rootScope.$on('load-home', function(event) {
-            $scope.records = sf.getSession('modules');
+            $scope.modules = sf.getSession('modules');
         });
         $rootScope.$broadcast('load-home');
     }
 ])
 
-.controller('ModuleCtrl', ['$rootScope', '$scope', 'SessionFactory', 'API', '$ionicModal',
-    function($rootScope, $scope, sf, api, $ionicModal) {
+.controller('ListCtrl', ['$rootScope', '$stateParams', '$scope', 'SessionFactory', 'API', '$ionicModal',
+    function($rootScope, $stateParams, $scope, sf, api, $ionicModal) {
         $scope.records = [];
-        $rootScope.$on('load-records', function(event) {
+        $rootScope.$on('load-list', function(event) {
             $rootScope.showLoading('Fetching Records..');
             var user = sf.getSession('user');
-            var name = 'Accounts';
-            api.getRecords(name, user.session).success(function(data) {
-                $scope.records = data.result.records;
+            var name = $stateParams.moduleName;
+            api.getList(name, user.session)
+            .success(function(data) {
+                $scope.list = data.result.records;
                 $rootScope.hideLoading();
-            }).error(function(data) {
+            })
+            .error(function(data) {
                 $rootScope.hideLoading();
                 $rootScope.toast('Oops.. Something went wrong');
             });
         });
-        $rootScope.$broadcast('load-records');
+        $rootScope.$broadcast('load-list');
         $rootScope.createNew = function() {
             $scope.modal.show();
         }
@@ -56,6 +60,27 @@ angular.module('myvtiger.controllers', [])
             animation: 'slide-in-up',
             focusFirstInput: true
         });
+    }
+])
+
+.controller('DetailCtrl', ['$rootScope', '$stateParams', '$scope', 'SessionFactory', 'API',
+    function($rootScope, $stateParams, $scope, sf, api) {
+        $scope.detail = [];
+        $rootScope.$on('load-detail', function(event) {
+            $rootScope.showLoading('Fetching Detail..');
+            var user = sf.getSession('user');
+            var id = $stateParams.recordId;
+            api.getDetail(id, user.session)
+            .success(function(data) {
+                $scope.detail = data.result.record;
+                $rootScope.hideLoading();
+            })
+            .error(function(data) {
+                $rootScope.hideLoading();
+                $rootScope.toast('Oops.. Something went wrong');
+            });
+        });
+        $rootScope.$broadcast('load-detail');
     }
 ])
 
