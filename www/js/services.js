@@ -8,16 +8,16 @@ angular.module('myvtiger.services', [])
                 return $http({
                     method: "POST",
                     url: _base,
-                    data: '_operation=login&username=' + user.username + '&password=' + user.password,
+                    data: '_operation=loginAndFetchModules&username=' + user.username + '&password=' + user.password,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 });
                 // return $http.post(_base + '/modules/Mobile/api.php', dataObj);
             },
-            getTodos: function(session) {
+            getRecords: function(name, session) {
                 return $http({
                     method: "POST",
                     url: _base,
-                    data: '_operation=alertDetailsWithMessage&alertid=7&_session=' + session,
+                    data: '_operation=listModuleRecords&module=' + name + '&_session=' + session,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 });
                 // return $http.get(_base + '/api/data/getTodos/' + userid);
@@ -33,18 +33,18 @@ angular.module('myvtiger.services', [])
 .factory('SessionFactory', ['$window',
     function($window) {
         var _sessionFactory = {
-            createSession: function(user) {
-                return $window.localStorage.user = JSON.stringify(user);
+            createSession: function(key, data) {
+                return $window.localStorage[key] = JSON.stringify(data);
             },
-            getSession: function(user) {
-                return JSON.parse($window.localStorage.user);
+            getSession: function(key) {
+                return JSON.parse($window.localStorage[key]);
             },
-            deleteSession: function() {
-                delete $window.localStorage.user;
+            deleteSession: function(key) {
+                delete $window.localStorage[key];
                 return true;
             },
             checkSession: function() {
-                if ($window.localStorage.user) {
+                if ($window.localStorage[key]) {
                     return true;
                 } else {
                     return false;

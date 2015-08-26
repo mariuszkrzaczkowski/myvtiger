@@ -13,6 +13,10 @@ var app = angular.module('myvtiger', ['ionic', 'myvtiger.controllers', 'myvtiger
         url: '/home',
         templateUrl: 'templates/home.html',
         controller: 'HomeCtrl'
+    }).state('records', {
+        url: '/records',
+        templateUrl: 'templates/records.html',
+        controller: 'ModuleCtrl'
     });
     $urlRouterProvider.otherwise('/login');
 })

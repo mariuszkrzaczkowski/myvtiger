@@ -9,7 +9,8 @@ angular.module('myvtiger.controllers', [])
         $scope.loginUser = function() {
             $rootScope.showLoading("Authenticating..");
             api.login($scope.login).success(function(data) {
-                sf.createSession(data.result.login);
+                sf.createSession('user', data.result.login);
+                sf.createSession('modules', data.result.modules);
                 $location.path('/home');
                 $rootScope.hideLoading();
             }).error(function(data) {
@@ -20,21 +21,32 @@ angular.module('myvtiger.controllers', [])
     }
 ])
 
-.controller('HomeCtrl', ['$rootScope', '$scope', 'SessionFactory', 'API', '$ionicModal',
+.controller('HomeCtrl', ['$rootScope', '$scope', 'SessionFactory',
+    function($rootScope, $scope, sf) {
+        $scope.records = [];
+        $rootScope.$on('load-home', function(event) {
+            $scope.records = sf.getSession('modules');
+        });
+        $rootScope.$broadcast('load-home');
+    }
+])
+
+.controller('ModuleCtrl', ['$rootScope', '$scope', 'SessionFactory', 'API', '$ionicModal',
     function($rootScope, $scope, sf, api, $ionicModal) {
-        $scope.todos = [];
-        $rootScope.$on('load-todos', function(event) {
-            $rootScope.showLoading('Fetching Todos..');
-            var login = sf.getSession();
-            api.getTodos(login.session).success(function(data) {
-                $scope.todos = data.data;
+        $scope.records = [];
+        $rootScope.$on('load-records', function(event) {
+            $rootScope.showLoading('Fetching Records..');
+            var user = sf.getSession('user');
+            var name = 'Accounts';
+            api.getRecords(name, user.session).success(function(data) {
+                $scope.records = data.result.records;
                 $rootScope.hideLoading();
             }).error(function(data) {
                 $rootScope.hideLoading();
                 $rootScope.toast('Oops.. Something went wrong');
             });
         });
-        $rootScope.$broadcast('load-todos');
+        $rootScope.$broadcast('load-records');
         $rootScope.createNew = function() {
             $scope.modal.show();
         }
@@ -59,7 +71,7 @@ angular.module('myvtiger.controllers', [])
             }).success(function(data) {
                 $rootScope.hideLoading();
                 $scope.modal.hide();
-                $rootScope.$broadcast('load-todos');
+                $rootScope.$broadcast('load-records');
             }).error(function(data) {
                 $rootScope.hideLoading();
                 $rootScope.toast('Oops.. Something went wrong');
