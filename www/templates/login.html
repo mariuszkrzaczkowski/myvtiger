@@ -10,8 +10,12 @@
                 <span class="input-label">Password</span>
                 <input type="password" ng-model="login.password" placeholder="Password">
             </label>
+            <label class="item item-input">
+                <span class="input-label">vTiger URL</span>
+                <input type="text" ng-model="login.vtigerurl" placeholder="vTiger URL">
+            </label>
         </ion-list>
-        <a href="" class="button button-positive button-block" ng-disabled="!login.username || !login.password" ng-click="loginUser()">Log in</a>
+        <a href="" class="button button-positive button-block" ng-disabled="!login.username || !login.password || !login.vtigerurl" ng-click="loginUser()">Log in</a>
     </form>
 </ion-content>
 </ion-view>

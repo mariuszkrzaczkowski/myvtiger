@@ -2,28 +2,28 @@ angular.module('myvtiger.services', [])
 
 .factory('API', ['$http',
     function($http) {
-        var _base = "http://192.168.1.67/vtiger/vt61/modules/Mobile/api.php";
+        var _base = "/modules/Mobile/api.php";
         var _api = {
-            login: function(user) {
+            login: function(user, vtigerurl) {
                 return $http({
                     method: "POST",
-                    url: _base,
+                    url: vtigerurl + _base,
                     data: '_operation=loginAndFetchModules&username=' + user.username + '&password=' + user.password,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 });
             },
-            getList: function(name, session) {
+            getList: function(name, session, vtigerurl) {
                 return $http({
                     method: "POST",
-                    url: _base,
+                    url: vtigerurl + _base,
                     data: '_operation=listModuleRecords&module=' + name + '&_session=' + session,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 });
             },
-            getDetail: function(id, session) {
+            getDetail: function(id, session, vtigerurl) {
                 return $http({
                     method: "POST",
-                    url: _base,
+                    url: vtigerurl + _base,
                     data: '_operation=fetchRecord&record=' + id + '&_session=' + session,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 });

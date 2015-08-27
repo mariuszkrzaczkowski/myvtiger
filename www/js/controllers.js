@@ -12,11 +12,13 @@ angular.module('myvtiger.controllers', [])
     function($rootScope, $location, $scope, api, sf) {
         $scope.login = {
             username: '',
-            password: ''
+            password: '',
+            vtigerurl: '',
         };
         $scope.loginUser = function() {
+            sf.createSession('vtigerurl',$scope.login.vtigerurl);
             $rootScope.showLoading("Authenticating..");
-            api.login($scope.login)
+            api.login($scope.login, $scope.login.vtigerurl)
             .success(function(data) {
                 sf.createSession('user', data.result.login);
                 sf.createSession('modules', data.result.modules);
@@ -45,13 +47,14 @@ angular.module('myvtiger.controllers', [])
     function($rootScope, $stateParams, $scope, sf, api, $ionicModal) {
         $scope.records = [];
         $rootScope.$on('load-list', function(event) {
-            var user = sf.getSession('user');
             var name = $stateParams.moduleName;
             if(sf.checkSession(name)) {
                 $scope.list = sf.getSession(name);
             } else {
                 $rootScope.showLoading('Fetching Records..');
-                api.getList(name, user.session)
+                var user = sf.getSession('user');
+                var vtigerurl = sf.getSession('vtigerurl');
+                api.getList(name, user.session, vtigerurl)
                 .success(function(data) {
                     $scope.list = data.result.records;
                     sf.createSession(name, data.result.records);
@@ -82,8 +85,9 @@ angular.module('myvtiger.controllers', [])
         $rootScope.$on('load-detail', function(event) {
             $rootScope.showLoading('Fetching Detail..');
             var user = sf.getSession('user');
+            var vtigerurl = sf.getSession('vtigerurl');
             var id = $stateParams.recordId;
-            api.getDetail(id, user.session)
+            api.getDetail(id, user.session, vtigerurl)
             .success(function(data) {
                 $scope.detail = data.result.record;
                 $rootScope.hideLoading();
