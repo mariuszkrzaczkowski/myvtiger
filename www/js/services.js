@@ -24,7 +24,7 @@ angular.module('myvtiger.services', [])
                 return $http({
                     method: "POST",
                     url: vtigerurl + _base,
-                    data: '_operation=fetchRecord&record=' + id + '&_session=' + session,
+                    data: '_operation=fetchRecordWithGrouping&record=' + id + '&_session=' + session,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 });
             },

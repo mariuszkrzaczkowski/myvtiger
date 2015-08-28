@@ -1,4 +1,4 @@
-var app = angular.module('myvtiger', ['ionic', 'myvtiger.controllers', 'myvtiger.services'])
+var app = angular.module('myvtiger', ['ionic', 'myvtiger.controllers', 'myvtiger.services', 'elif'])
 
 .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider.state('login', {

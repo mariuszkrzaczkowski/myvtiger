@@ -1,7 +1,14 @@
 <ion-view title="Detail">
-<ion-content padding="true" class="has-header">
-    <ion-list>
-        <ion-item>{{detail.assigned_user_id.label}}</ion-item>
-    </ion-list>
+<ion-content class="has-header">
+	<div class="list" ng-repeat="b in detail.blocks">
+		<div class="item item-divider">{{b.label}}</div>
+		<div class="item item-text-wrap">
+			<div class="row" ng-repeat="f in b.fields">
+				<div class="col">{{f.label}}</div>
+				<div class="col" ng-if="f.value.label || f.value.label == '' || f.value.label == 'null'">{{f.value.label}}</div>
+				<div class="col" ng-else="f.value">{{f.value}}</div>
+			</div>
+		</div>
+	</div>
 </ion-content>
 </ion-view>
